@@ -1,0 +1,49 @@
+<idea-plugin>
+    <id>com.kuky.CovPlugin</id>
+    <name>CovDevHelper</name>
+    <vendor email="kukyxingshi@163.com" url="https://github.com/kukyxs">Personal</vendor>
+
+    <description>Quick dev plugin for [cov](https://github.com/kukyxs/CoMvvmHelper)</description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <group id="com.kuky.covplugin.CovCreatorGroup"
+               class="com.kuky.covplugin.CovCreatorGroup"
+               text="CovCreator"
+               popup="true" description="Quick create cov files">
+
+            <action id="com.kuky.covplugin.actions.CovActivityAction"
+                    class="com.kuky.covplugin.actions.CovActivityAction"
+                    text="CovActivity"
+                    description="Create a cov activity with layout file">
+            </action>
+
+            <action id="com.kuky.covplugin.actions.CovFragmentAction"
+                    class="com.kuky.covplugin.actions.CovFragmentAction"
+                    text="CovFragment"
+                    description="Create a cov fragment with layout file">
+            </action>
+
+            <action id="com.kuky.covplugin.actions.CovRecyclerAdapterAction"
+                    class="com.kuky.covplugin.actions.CovRecyclerAdapterAction"
+                    text="CovRecyclerAdapter"
+                    description="Create a cov recycler adapter with layout file">
+            </action>
+
+            <action id="com.kuky.covplugin.actions.CovDialogFragmentAction"
+                    class="com.kuky.covplugin.actions.CovDialogFragmentAction"
+                    text="CovDialogFragment"
+                    description="Create a cov dialog fragment with layout file">
+            </action>
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </group>
+    </actions>
+</idea-plugin>
