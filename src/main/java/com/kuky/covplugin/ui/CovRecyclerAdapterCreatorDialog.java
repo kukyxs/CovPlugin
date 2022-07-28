@@ -1,6 +1,5 @@
 package com.kuky.covplugin.ui;
 
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiDirectory;
@@ -163,15 +162,13 @@ public class CovRecyclerAdapterCreatorDialog extends DialogWrapper {
 
         File layoutFile = new File(resLayoutPath, layoutName + ".xml");
 
-        ApplicationManager.getApplication().runWriteAction(() -> {
-            try {
-                Utils.writeContentToFile(classFile, adapterClassFileModel(className, layoutName, pojoClassField.getText()));
-                Utils.writeContentToFile(layoutFile, adapterLayoutModel());
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("write to file error");
-            }
-        });
+        try {
+            Utils.writeContentToFile(classFile, adapterClassFileModel(className, layoutName, pojoClassField.getText()));
+            Utils.writeContentToFile(layoutFile, adapterLayoutModel());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("write to file error");
+        }
     }
 
     private String adapterClassFileModel(String className, String layoutName, String pojo) {

@@ -1,6 +1,5 @@
 package com.kuky.covplugin.ui;
 
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiDirectory;
@@ -177,31 +176,28 @@ public class CovActivityCreatorDialog extends DialogWrapper {
         String manifestPath = Utils.findAndroidManifestFile(classFile);
         File manifestFile = manifestPath == null ? null : new File(manifestPath);
 
-        File finalVmFile = vmFile;
-        ApplicationManager.getApplication().runWriteAction(() -> {
-            try {
-                Utils.writeContentToFile(classFile, activityClassFileModel(className, layoutName, vmName));
-                Utils.writeContentToFile(layoutFile, activityLayoutModel());
+        try {
+            Utils.writeContentToFile(classFile, activityClassFileModel(className, layoutName, vmName));
+            Utils.writeContentToFile(layoutFile, activityLayoutModel());
 
-                if (finalVmFile != null) {
-                    Utils.writeContentToFile(finalVmFile, viewModelFileModel(vmName));
-                }
-
-                if (manifestFile != null) {
-                    String content = Utils.readCompleteFileAsString(manifestFile);
-                    if (!content.contains("</application>")) return;
-                    int insertIndex = content.indexOf("</application>");
-                    StringBuilder sb = new StringBuilder(content);
-                    sb.insert(insertIndex, "\n" + "        <activity\n" +
-                            "            android:name=\"" + packageName + "." + className + "\"\n" +
-                            "            android:exported=\"false\" />\n");
-                    Utils.writeContentToFile(manifestFile, sb.toString());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("write to file error");
+            if (vmFile != null) {
+                Utils.writeContentToFile(vmFile, viewModelFileModel(vmName));
             }
-        });
+
+            if (manifestFile != null) {
+                String content = Utils.readCompleteFileAsString(manifestFile);
+                if (!content.contains("</application>")) return;
+                int insertIndex = content.indexOf("</application>");
+                StringBuilder sb = new StringBuilder(content);
+                sb.insert(insertIndex, "\n" + "        <activity\n" +
+                        "            android:name=\"" + packageName + "." + className + "\"\n" +
+                        "            android:exported=\"false\" />\n");
+                Utils.writeContentToFile(manifestFile, sb.toString().trim());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("write to file error");
+        }
     }
 
     private String viewModelFileModel(String viewModelName) {
@@ -221,7 +217,7 @@ public class CovActivityCreatorDialog extends DialogWrapper {
         boolean hilt = hiltCheckBox.isSelected();
         boolean createVm = !StringUtil.isBlank(viewModel);
 
-        return "package " + packageName +
+        return "package " + packageName + "\n" +
                 "\n" +
                 "import android.os.Bundle\n" +
                 (createVm ? "import androidx.activity.viewModels\n" : "") +

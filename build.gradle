@@ -17,7 +17,9 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2021.3'
+    // 根据 as 版本配置不同的 version，as 使用 idea 版本可查看
+    // https://plugins.jetbrains.com/docs/intellij/android-studio-releases-list.html
+    version = '2021.2'
 }
 
 patchPluginXml {

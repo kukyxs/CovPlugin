@@ -141,21 +141,19 @@ public class CovDialogFragmentCreatorDialog extends DialogWrapper {
 
         File layoutFile = new File(resLayoutPath, layoutName + ".xml");
 
-        ApplicationManager.getApplication().runWriteAction(() -> {
-            try {
-                Utils.writeContentToFile(classFile, dialogClassFileModel(className, layoutName));
-                Utils.writeContentToFile(layoutFile, dialogLayoutModel());
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("write to file error");
-            }
-        });
+        try {
+            Utils.writeContentToFile(classFile, dialogClassFileModel(className, layoutName));
+            Utils.writeContentToFile(layoutFile, dialogLayoutModel());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("write to file error");
+        }
     }
 
     private String dialogClassFileModel(String className, String layoutName) {
         boolean hilt = hiltCheckBox.isSelected();
 
-        return "package " + packageName +
+        return "package " + packageName + "\n" +
                 "\n" +
                 "import android.os.Bundle\n" +
                 "import android.view.View\n" +

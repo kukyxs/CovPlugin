@@ -1,6 +1,5 @@
 package com.kuky.covplugin.ui;
 
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiDirectory;
@@ -175,21 +174,18 @@ public class CovFragmentCreatorDialog extends DialogWrapper {
 
         File layoutFile = new File(resLayoutPath, layoutName + ".xml");
 
-        File finalVmFile = vmFile;
-        ApplicationManager.getApplication().runWriteAction(() -> {
-            try {
-                Utils.writeContentToFile(classFile, fragmentClassFileModel(className, layoutName, vmName));
-                Utils.writeContentToFile(layoutFile, fragmentLayoutModel());
+        try {
+            Utils.writeContentToFile(classFile, fragmentClassFileModel(className, layoutName, vmName));
+            Utils.writeContentToFile(layoutFile, fragmentLayoutModel());
 
-                if (finalVmFile != null) {
-                    Utils.writeContentToFile(finalVmFile, viewModelFileModel(vmName));
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("write to file error");
+            if (vmFile != null) {
+                Utils.writeContentToFile(vmFile, viewModelFileModel(vmName));
             }
-        });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("write to file error");
+        }
     }
 
     private String viewModelFileModel(String viewModelName) {
@@ -209,7 +205,7 @@ public class CovFragmentCreatorDialog extends DialogWrapper {
         boolean hilt = hiltCheckBox.isSelected();
         boolean createVm = !StringUtil.isBlank(viewModel);
 
-        return "package " + packageName +
+        return "package " + packageName + "\n" +
                 "\n" +
                 "import android.os.Bundle\n" +
                 "import android.view.View\n" +

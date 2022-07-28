@@ -43,7 +43,7 @@
                     text="CovDialogFragment"
                     description="Create a cov dialog fragment with layout file">
             </action>
-            <add-to-group group-id="NewGroup" anchor="last"/>
+            <add-to-group group-id="NewGroup" anchor="first"/>
         </group>
     </actions>
 </idea-plugin>
