@@ -142,7 +142,7 @@ public class CovDialogFragmentCreatorDialog extends DialogWrapper {
         File layoutFile = new File(resLayoutPath, layoutName + ".xml");
 
         try {
-            Utils.writeContentToFile(classFile, dialogClassFileModel(className, layoutName));
+            Utils.writeContentToFile(classFile, dialogClassFileModel(className, layoutName, Utils.appPackage(classFile)));
             Utils.writeContentToFile(layoutFile, dialogLayoutModel());
         } catch (IOException e) {
             e.printStackTrace();
@@ -150,7 +150,7 @@ public class CovDialogFragmentCreatorDialog extends DialogWrapper {
         }
     }
 
-    private String dialogClassFileModel(String className, String layoutName) {
+    private String dialogClassFileModel(String className, String layoutName, String appPkg) {
         boolean hilt = hiltCheckBox.isSelected();
 
         return "package " + packageName + "\n" +
@@ -159,6 +159,9 @@ public class CovDialogFragmentCreatorDialog extends DialogWrapper {
                 "import android.view.View\n" +
                 "import com.kk.android.comvvmhelper.anno.DialogConfig\n" +
                 "import com.kk.android.comvvmhelper.ui.BaseDialogFragment\n" +
+                (StringUtil.isBlank(appPkg) ? "" :
+                        "import " + appPkg + ".R\n" +
+                                "import " + appPkg + ".databinding." + Utils.layoutToBindings(layoutName) + "\n") +
                 (hilt ? "import dagger.hilt.android.AndroidEntryPoint\nimport javax.inject.Inject\n" : "") +
                 "\n" +
                 (hilt ? "@AndroidEntryPoint\n" : "") +

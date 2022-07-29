@@ -177,7 +177,7 @@ public class CovActivityCreatorDialog extends DialogWrapper {
         File manifestFile = manifestPath == null ? null : new File(manifestPath);
 
         try {
-            Utils.writeContentToFile(classFile, activityClassFileModel(className, layoutName, vmName));
+            Utils.writeContentToFile(classFile, activityClassFileModel(className, layoutName, Utils.appPackage(classFile), vmName));
             Utils.writeContentToFile(layoutFile, activityLayoutModel());
 
             if (vmFile != null) {
@@ -213,7 +213,7 @@ public class CovActivityCreatorDialog extends DialogWrapper {
                 "}";
     }
 
-    private String activityClassFileModel(String className, String layoutName, String viewModel) {
+    private String activityClassFileModel(String className, String layoutName, String appPkg, String viewModel) {
         boolean hilt = hiltCheckBox.isSelected();
         boolean createVm = !StringUtil.isBlank(viewModel);
 
@@ -223,6 +223,9 @@ public class CovActivityCreatorDialog extends DialogWrapper {
                 (createVm ? "import androidx.activity.viewModels\n" : "") +
                 "import com.kk.android.comvvmhelper.anno.ActivityConfig\n" +
                 "import com.kk.android.comvvmhelper.ui.BaseActivity\n" +
+                (StringUtil.isBlank(appPkg) ? "" :
+                        "import " + appPkg + ".R\n" +
+                                "import " + appPkg + ".databinding." + Utils.layoutToBindings(layoutName) + "\n") +
                 (hilt ? "import dagger.hilt.android.AndroidEntryPoint\n" : "") +
                 "\n" +
                 (hilt ? "@AndroidEntryPoint\n" : "") +

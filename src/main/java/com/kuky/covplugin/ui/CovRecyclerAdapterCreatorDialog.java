@@ -163,7 +163,7 @@ public class CovRecyclerAdapterCreatorDialog extends DialogWrapper {
         File layoutFile = new File(resLayoutPath, layoutName + ".xml");
 
         try {
-            Utils.writeContentToFile(classFile, adapterClassFileModel(className, layoutName, pojoClassField.getText()));
+            Utils.writeContentToFile(classFile, adapterClassFileModel(className, layoutName, Utils.appPackage(classFile), pojoClassField.getText()));
             Utils.writeContentToFile(layoutFile, adapterLayoutModel());
         } catch (IOException e) {
             e.printStackTrace();
@@ -171,13 +171,16 @@ public class CovRecyclerAdapterCreatorDialog extends DialogWrapper {
         }
     }
 
-    private String adapterClassFileModel(String className, String layoutName, String pojo) {
+    private String adapterClassFileModel(String className, String layoutName, String appPkg, String pojo) {
         boolean hilt = hiltCheckBox.isSelected();
 
         return "package " + packageName + "\n" +
                 "\n" +
                 "import com.kk.android.comvvmhelper.ui.BaseRecyclerViewAdapter\n" +
                 "import com.kk.android.comvvmhelper.ui.BaseRecyclerViewHolder\n" +
+                (StringUtil.isBlank(appPkg) ? "" :
+                        "import " + appPkg + ".R\n" +
+                                "import " + appPkg + ".databinding." + Utils.layoutToBindings(layoutName) + "\n") +
                 (hilt ? "import javax.inject.Inject\n" : "") +
                 "\n" +
                 "class " + className + (hilt ? " @Inject constructor()" : "") + " : BaseRecyclerViewAdapter<" + (StringUtil.isBlank(pojo) ? "Any" : pojo) + ">() {\n" +

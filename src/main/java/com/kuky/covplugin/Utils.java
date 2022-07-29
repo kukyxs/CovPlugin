@@ -11,6 +11,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,6 +53,23 @@ public class Utils {
         char[] arr = val.toCharArray();
         arr[0] = Character.toUpperCase(arr[0]);
         return new String(arr);
+    }
+
+    public static String appPackage(File file) throws IOException {
+        String path = findAndroidManifestFile(file);
+        if (path == null) return null;
+
+        Pattern p = Pattern.compile("package=\"[a-zA-Z0-9.]+\"");
+        StringBuilder sb = new StringBuilder();
+        Scanner scanner = new Scanner(new File(path));
+        while (scanner.hasNextLine()) {
+            sb.append(scanner.nextLine()).append("\n");
+            Matcher matcher = p.matcher(sb.toString());
+            if (matcher.find()) {
+                return matcher.group(0).replace("package=\"", "").replace("\"", "");
+            }
+        }
+        return null;
     }
 
     public static String findAndroidManifestFile(File file) {
