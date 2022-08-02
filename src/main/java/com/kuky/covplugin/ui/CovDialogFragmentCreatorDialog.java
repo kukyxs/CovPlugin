@@ -2,7 +2,9 @@ package com.kuky.covplugin.ui;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.JBColor;
@@ -144,6 +146,8 @@ public class CovDialogFragmentCreatorDialog extends DialogWrapper {
         try {
             Utils.writeContentToFile(classFile, dialogClassFileModel(className, layoutName, Utils.appPackage(classFile)));
             Utils.writeContentToFile(layoutFile, dialogLayoutModel());
+            VirtualFile vf = ProjectUtil.guessProjectDir(mProject);
+            if (vf != null) vf.refresh(true, true);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("write to file error");

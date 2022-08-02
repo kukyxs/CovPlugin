@@ -1,7 +1,9 @@
 package com.kuky.covplugin.ui;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.JBColor;
@@ -193,6 +195,8 @@ public class CovActivityCreatorDialog extends DialogWrapper {
                         "            android:name=\"" + packageName + "." + className + "\"\n" +
                         "            android:exported=\"false\" />\n");
                 Utils.writeContentToFile(manifestFile, sb.toString().trim());
+                VirtualFile vf = ProjectUtil.guessProjectDir(mProject);
+                if (vf != null) vf.refresh(true, true);
             }
         } catch (IOException e) {
             e.printStackTrace();
