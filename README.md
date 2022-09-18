@@ -20,4 +20,5 @@ when build finished you can find the plugin at directory `build > distributions`
 
 
 ### Plugin for Android Studio Chipmunk
-[Plugin](https://github.com/kukyxs/CovPlugin/blob/master/art/CovPluginForAsChipmunk.zip)
+[CovPluginForAsChipmunk](https://github.com/kukyxs/CovPlugin/blob/master/art/CovPluginForAsChipmunk.zip)
+[CovPluginForDolphin](https://github.com/kukyxs/CovPlugin/blob/master/art/CovPluginForDolphin.zip)
